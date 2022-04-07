@@ -1,13 +1,9 @@
-package com.ex2.shop.dto;
+package com.ex2.example.dto;
 
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
-@Getter
-@Setter
-@ToString
 public class UserDto {
 
     private String name;
