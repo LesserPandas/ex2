@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.View;
 
 import javax.validation.Valid;
 
@@ -51,4 +52,16 @@ public class MemberController {
         return mav;
     }
 
+    @GetMapping(value = "/login")
+    public ModelAndView loginMember(ModelAndView mav) {
+        mav.setViewName("/member/memberLoginForm");
+        return mav;
+    }
+
+    @GetMapping(value = "/login/error")
+    public ModelAndView loginError(ModelAndView mav) {
+        mav.addObject("loginErrorMsg", "아이디 또는 비밀번호를 확인해주세요");
+        mav.setViewName("/member/memberLoginForm");
+        return mav;
+    }
 }
