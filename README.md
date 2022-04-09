@@ -3,10 +3,12 @@
 #### 작성 목적 ) 따라하면서 헷갈린 부분, 책과 상이한 부분에 대해서 기록한다.
 ##도서명 : 스프링 부트 쇼핑몰 프로젝트 with JPA
 > ###개발환경 
-> IntelliJ IDEA 2021.3.3 Community Edition  
-> MySQL Ver 8.0.28 for macos12.2 on arm64  
-> Spring boot 2.6.6  
-> Gradle 7.4.1 (책에선 Maven으로 하지만 Maven을 개인적으로 안 좋아해서 바꿈)
+>> MacOS Monterey 12.3.1  
+>> IntelliJ IDEA 2021.3.3 Community Edition  
+>> MySQL Ver 8.0.28 for macos12.2 on arm64  
+>> Spring boot 2.6.6  
+>> Gradle 7.4.1 (책에선 Maven으로 하지만 Maven을 개인적으로 안 좋아해서 바꿈)  
+
 
 -----
 

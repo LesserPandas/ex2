@@ -166,7 +166,7 @@ class ItemRepositoryTest {
     }
 
     @Test
-    @DisplayName("Item9. 상품 Querydsl 조회 테스트 2")
+    @DisplayName("Item9. 상품 Querydsl 조회 테스트2")
     public void queryDslTest2() {
         this.createItemList2();
 
