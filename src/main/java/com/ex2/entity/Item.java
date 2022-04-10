@@ -6,17 +6,16 @@ import lombok.Setter;
 import lombok.ToString;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 
 @Entity
-@Table(name="item")
+@Table(name = "item")
 @Getter
 @Setter
 @ToString
-public class Item {
+public class Item extends BaseEntity {
 
     @Id
-    @Column(name="item_id")
+    @Column(name = "item_id")
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
@@ -35,9 +34,5 @@ public class Item {
 
     @Enumerated(EnumType.STRING)
     private ItemSellStatus itemSellStatus;
-
-    private LocalDateTime regTime;
-
-    private LocalDateTime updateTime;
 
 }

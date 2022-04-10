@@ -47,7 +47,7 @@ class ItemRepositoryTest {
 
     @Test
     @DisplayName("Item1. 상품 저장 테스트")
-    public void createItemTest() {
+    void createItemTest() {
         Item item = new Item();
         item.setItemNm("테스트 상품");
         item.setPrice(10000);
@@ -57,12 +57,11 @@ class ItemRepositoryTest {
         item.setRegTime(LocalDateTime.now());
         item.setUpdateTime(LocalDateTime.now());
         Item savedItem = itemRepository.save(item);
-        System.out.println(savedItem.toString());
     }
 
     @Test
     @DisplayName("Item2. 상품명 조회 테스트")
-    public void findByItemNmTest() {
+    void findByItemNmTest() {
         this.createItemList();
         List<Item> itemList = itemRepository.findByItemNm("테스트 상품1");
         for (Item item : itemList) {
@@ -72,7 +71,7 @@ class ItemRepositoryTest {
 
     @Test
     @DisplayName("Item3. 상품명, 상품상세설명 or 테스트")
-    public void findByItemNmOrItemDetailTest() {
+    void findByItemNmOrItemDetailTest() {
         this.createItemList();
         List<Item> itemList =
                 itemRepository.findByItemNmOrItemDetail("테스트 상품1", "테스트 상품 상세 설명5");
@@ -83,7 +82,7 @@ class ItemRepositoryTest {
 
     @Test
     @DisplayName("Item4. 가격 LessThan 테스트")
-    public void findBPriceLessThanTest() {
+    void findBPriceLessThanTest() {
         this.createItemList();
         List<Item> itemList = itemRepository.findByPriceLessThan(10005);
         for (Item item : itemList) {
@@ -93,7 +92,7 @@ class ItemRepositoryTest {
 
     @Test
     @DisplayName("Item5. 가격 내림차순 조회 테스트")
-    public void findByPriceLessThanOrderByPriceDescTest() {
+    void findByPriceLessThanOrderByPriceDescTest() {
         this.createItemList();
         List<Item> itemList = itemRepository.findByPriceLessThanOrderByPriceDesc(10005);
         for (Item item : itemList) {
@@ -103,7 +102,7 @@ class ItemRepositoryTest {
 
     @Test
     @DisplayName("Item6. @Query를 이용한 상품 조회 테스트")
-    public void findByItemDetailTest() {
+    void findByItemDetailTest() {
         this.createItemList();
         List<Item> itemList = itemRepository.findByItemDetail("테스트 상품 상세 설명");
         for (Item item : itemList) {
@@ -113,7 +112,7 @@ class ItemRepositoryTest {
 
     @Test
     @DisplayName("Item7. nativeQuery 속성을 이용한 상품 조회 테스트")
-    public void findByItemDetailByNativeTest() {
+    void findByItemDetailByNativeTest() {
         this.createItemList();
         List<Item> itemList = itemRepository.findByItemDetailByNative("테스트 상품 상세 설명");
         for (Item item : itemList) {
@@ -123,7 +122,7 @@ class ItemRepositoryTest {
 
     @Test
     @DisplayName("Item8. Querydsl 조회 테스트1")
-    public void queryDslTest() {
+    void queryDslTest() {
         this.createItemList();
         JPAQueryFactory queryFactory = new JPAQueryFactory(em);
         QItem qItem = QItem.item;
@@ -167,7 +166,7 @@ class ItemRepositoryTest {
 
     @Test
     @DisplayName("Item9. 상품 Querydsl 조회 테스트2")
-    public void queryDslTest2() {
+    void queryDslTest2() {
         this.createItemList2();
 
         BooleanBuilder booleanBuilder = new BooleanBuilder();

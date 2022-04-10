@@ -10,11 +10,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import javax.persistence.*;
 
 @Entity
-@Table(name="member")
+@Table(name = "member")
 @Getter
 @Setter
 @ToString
-public class Member {
+public class Member extends BaseEntity {
 
     @Id
     @Column(name = "member_id")
@@ -34,7 +34,7 @@ public class Member {
     private Role role;
 
     public static Member createMember(MemberFormDto memberFormDto,
-                                      PasswordEncoder passwordEncoder){
+                                      PasswordEncoder passwordEncoder) {
         Member member = new Member();
         member.setName(memberFormDto.getName());
         member.setEmail(memberFormDto.getEmail());
