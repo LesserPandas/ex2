@@ -2,9 +2,11 @@ package com.ex2.repository;
 
 import com.ex2.constant.ItemSellStatus;
 import com.ex2.dto.ItemSearchDto;
+import com.ex2.dto.MainItemDto;
+import com.ex2.dto.QMainItemDto;
 import com.ex2.entity.Item;
 import com.ex2.entity.QItem;
-import com.querydsl.core.QueryResults;
+import com.ex2.entity.QItemImg;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
@@ -21,7 +23,7 @@ public class ItemRepositoryCustomImpl implements ItemRepositoryCustom {
 
     private JPAQueryFactory queryFactory;
 
-    public ItemRepositoryCustomImpl(EntityManager em){
+    public ItemRepositoryCustomImpl(EntityManager em) {
         this.queryFactory = new JPAQueryFactory(em);
     }
 
@@ -34,13 +36,13 @@ public class ItemRepositoryCustomImpl implements ItemRepositoryCustom {
 
         if (StringUtils.equals("all", searchDateType) || searchDateType == null) {
             return null;
-        } else if (StringUtils.equals("1d", searchDateType)){
+        } else if (StringUtils.equals("1d", searchDateType)) {
             dateTime = dateTime.minusDays(1);
-        }else if (StringUtils.equals("1w", searchDateType)){
+        } else if (StringUtils.equals("1w", searchDateType)) {
             dateTime = dateTime.minusWeeks(1);
-        }else if (StringUtils.equals("1m", searchDateType)){
+        } else if (StringUtils.equals("1m", searchDateType)) {
             dateTime = dateTime.minusMonths(1);
-        }else if (StringUtils.equals("6m", searchDateType)){
+        } else if (StringUtils.equals("6m", searchDateType)) {
             dateTime = dateTime.minusMonths(1);
         }
 
@@ -49,10 +51,10 @@ public class ItemRepositoryCustomImpl implements ItemRepositoryCustom {
 
     private BooleanExpression searchByLike(String searchBy, String searchQuery) {
 
-        if (StringUtils.equals("itemNm", searchBy)){
+        if (StringUtils.equals("itemNm", searchBy)) {
             return QItem.item.itemNm.like("%" + searchQuery + "%");
-        } else if (StringUtils.equals("createBy", searchBy)){
-            return QItem.item.createBy.like("%" + searchQuery + "%");
+        } else if (StringUtils.equals("createdBy", searchBy)) {
+            return QItem.item.createdBy.like("%" + searchQuery + "%");
         }
 
         return null;
@@ -61,19 +63,50 @@ public class ItemRepositoryCustomImpl implements ItemRepositoryCustom {
     @Override
     public Page<Item> getAdminItemPage(ItemSearchDto itemSearchDto, Pageable pageable) {
 
-        QueryResults<Item> results = queryFactory
+        List<Item> content = queryFactory
                 .selectFrom(QItem.item)
                 .where(regDtsAfter(itemSearchDto.getSearchDateType()),
                         searchSellStatusEq(itemSearchDto.getSearchSellStatus()),
                         searchByLike(itemSearchDto.getSearchBy(),
-                                itemSearchDto.getSearchQuery()))
+                                itemSearchDto.getSearchQuery())
+                )
                 .orderBy(QItem.item.id.desc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
-                .fetchResults();
+                .fetch();
 
-        List<Item> content = results.getResults();
-        long total = results.getTotal();
+        long total = content.size();
+        return new PageImpl<>(content, pageable, total);
+    }
+
+    private BooleanExpression itemNmLike(String searchQuery) {
+        return StringUtils.isEmpty(searchQuery) ?
+                null : QItem.item.itemNm.like("%" + searchQuery + "%");
+    }
+
+    @Override
+    public Page<MainItemDto> getMainItemPage(ItemSearchDto itemSearchDto, Pageable pageable) {
+        QItem item = QItem.item;
+        QItemImg itemImg = QItemImg.itemImg;
+
+        List<MainItemDto> content = queryFactory
+                .select(
+                        new QMainItemDto(
+                                item.id,
+                                item.itemNm,
+                                item.itemDetail,
+                                itemImg.imgUrl, item.price
+                        )
+                )
+                .from(itemImg)
+                .join(itemImg.item, item)
+                .where(itemImg.repimgYn.eq("Y"))
+                .where(itemNmLike(itemSearchDto.getSearchQuery()))
+                .orderBy(item.id.desc()).offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
+
+        long total = content.size();
         return new PageImpl<>(content, pageable, total);
     }
 }
