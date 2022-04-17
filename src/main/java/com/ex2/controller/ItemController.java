@@ -31,7 +31,7 @@ public class ItemController {
         return mav;
     }
 
-    @PostMapping(value = "admin/item/new")
+    @PostMapping(value = "/admin/item/new")
     public ModelAndView itemNew(@Valid ItemFormDto itemFormDto,
                                 BindingResult bindingResult, ModelAndView mav,
                                 @RequestParam("itemImgFile") List<MultipartFile> itemImgFileList) {
@@ -100,15 +100,23 @@ public class ItemController {
         return mav;
     }
 
-    @GetMapping(value = {"{/admin/items", "/admin/items/{page}"})
+    @GetMapping(value = {"/admin/items", "/admin/items/{page}"})
     public ModelAndView itemManage(ItemSearchDto itemSearchDto,
-                                   @PathVariable("page")Optional<Integer> page, ModelAndView mav) {
+                                   @PathVariable("page") Optional<Integer> page, ModelAndView mav) {
         mav.setViewName("item/itemMng");
         Pageable pageable = PageRequest.of(page.isPresent() ? page.get() : 0, 3);
         Page<Item> items = itemService.getAdminItemPage(itemSearchDto, pageable);
         mav.addObject("items", items);
         mav.addObject("itemSearchDto", itemSearchDto);
         mav.addObject("maxPage", 5);
+        return mav;
+    }
+
+    @GetMapping(value = "/item/{itemId}")
+    public ModelAndView itemDtl(ModelAndView mav, @PathVariable("itemId") Long itemId){
+        ItemFormDto itemFormDto = itemService.getItemDtl(itemId);
+        mav.setViewName("item/itemDtl");
+        mav.addObject("item", itemFormDto);
         return mav;
     }
 }

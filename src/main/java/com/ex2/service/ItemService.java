@@ -3,6 +3,7 @@ package com.ex2.service;
 import com.ex2.dto.ItemFormDto;
 import com.ex2.dto.ItemImgDto;
 import com.ex2.dto.ItemSearchDto;
+import com.ex2.dto.MainItemDto;
 import com.ex2.entity.Item;
 import com.ex2.entity.ItemImg;
 import com.ex2.repository.ItemImgRepository;
@@ -91,4 +92,9 @@ public class ItemService {
         return itemRepository.getAdminItemPage(itemSearchDto, pageable);
     }
 
+    @Transactional(readOnly = true)
+    public Page<MainItemDto> getMainItemPage(ItemSearchDto itemSearchDto,
+                                             Pageable pageable){
+        return itemRepository.getMainItemPage(itemSearchDto, pageable);
+    }
 }
