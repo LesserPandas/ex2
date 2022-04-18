@@ -1,6 +1,7 @@
 package com.ex2.service;
 
 import com.ex2.constant.ItemSellStatus;
+import com.ex2.constant.OrderStatus;
 import com.ex2.dto.OrderDto;
 import com.ex2.entity.Item;
 import com.ex2.entity.Member;
@@ -21,6 +22,7 @@ import javax.persistence.EntityNotFoundException;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
+
 
 @SpringBootTest
 @Transactional
@@ -57,14 +59,13 @@ class OrderServiceTest {
 
     @Test
     @DisplayName("OrderSer1. 주문 테스트")
-    public void order() {
+    void order() {
         Item item = saveItem();
         Member member = saveMember();
 
         OrderDto orderDto = new OrderDto();
         orderDto.setCount(10);
         orderDto.setItemId(item.getId());
-
         Long orderId = orderService.order(orderDto, member.getEmail());
 
         Order order = orderRepository.findById(orderId)
@@ -75,6 +76,25 @@ class OrderServiceTest {
         int totalPrice = orderDto.getCount() * item.getPrice();
 
         assertEquals(totalPrice, order.getTotalPrice());
+        assertEquals(90, item.getStockNumber());
+    }
 
+    @Test
+    @DisplayName("OrderSer2. 주문 취소 테스트")
+    void cancelOrder() {
+        Item item = saveItem();
+        Member member = saveMember();
+
+        OrderDto orderDto = new OrderDto();
+        orderDto.setCount(10);
+        orderDto.setItemId(item.getId());
+        Long orderId = orderService.order(orderDto, member.getEmail());
+
+        Order order = orderRepository.findById(orderId)
+                .orElseThrow(EntityNotFoundException::new);
+        orderService.cancelOrder(orderId);
+
+        assertEquals(OrderStatus.CANCEL, order.getOrderStatus());
+        assertEquals(100, item.getStockNumber());
     }
 }

@@ -12,8 +12,7 @@ import javax.persistence.MappedSuperclass;
 
 @EntityListeners(value = {AuditingEntityListener.class})
 @MappedSuperclass
-@Getter
-@Setter
+@Getter @Setter
 public abstract class BaseEntity extends BaseTimeEntity {
 
     @CreatedBy
