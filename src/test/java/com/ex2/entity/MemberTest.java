@@ -31,6 +31,8 @@ class MemberTest {
     @WithMockUser(username = "gildong", roles = "USER")
     void auditingTest() {
         Member newMember = new Member();
+        newMember.setName("hong");
+        newMember.setEmail("hong@hong");
         memberRepository.save(newMember);
 
         em.flush();
@@ -40,9 +42,8 @@ class MemberTest {
                 .orElseThrow(EntityNotFoundException::new);
 
         System.out.println("register time : " + member.getRegTime());
-        System.out.println("create member : " + member.getCreatedBy());
-        System.out.println("===============================================");
         System.out.println("update time : " + member.getUpdateTime());
+        System.out.println("create member : " + member.getCreatedBy());
         System.out.println("modify member : " + member.getModifiedBy());
     }
 

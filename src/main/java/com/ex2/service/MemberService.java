@@ -39,7 +39,7 @@ public class MemberService implements UserDetailsService {
         }
 
         return User.builder()
-                .username(member.getName())
+                .username(member.getEmail()) // 여기서 member.getName으로 잘못 작성해서 이메일을 저장하지 못하였음
                 .password(member.getPassword())
                 .roles(member.getRole().toString())
                 .build();
