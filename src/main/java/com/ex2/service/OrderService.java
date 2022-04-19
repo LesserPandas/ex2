@@ -77,7 +77,7 @@ public class OrderService {
                 .orElseThrow(EntityNotFoundException::new);
         Member savedMember = order.getMember();
 
-        if (!StringUtils.equals(curMember.getModifiedBy(), savedMember.getEmail())){
+        if (!StringUtils.equals(curMember.getEmail(), savedMember.getEmail())){
             return false;
         }
 
@@ -88,5 +88,26 @@ public class OrderService {
         Order order = orderRepository.findById(orderId)
                 .orElseThrow(EntityNotFoundException::new);
         order.cancelOrder();
+    }
+
+    public Long order(List<OrderDto> orderDtoList, String email){
+
+        Member member = memberRepository.findByEmail(email);
+        List<OrderItem> orderItemList = new ArrayList<>();
+
+        for (OrderDto orderDto :
+                orderDtoList) {
+            Item item = itemRepository.findById(orderDto.getItemId())
+                    .orElseThrow(EntityNotFoundException::new);
+
+            OrderItem orderItem =
+                    OrderItem.createOrderItem(item, orderDto.getCount());
+            orderItemList.add(orderItem);
+        }
+
+        Order order = Order.createOrder(member, orderItemList);
+        orderRepository.save(order);
+
+        return order.getId();
     }
 }
